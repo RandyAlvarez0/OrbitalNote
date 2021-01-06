@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bglogin">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="534dp"
+        android:layout_height="590dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="-11dp"
+        android:layout_marginTop="-160dp"
+        android:layout_marginEnd="-112dp"
+        android:src="@drawable/gggg" />
+
+    <TextView
+        android:layout_width="204dp"
+        android:layout_height="74dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="229dp"
+        android:layout_marginEnd="95dp"
+        android:fontFamily="@font/baloo"
+        android:includeFontPadding="false"
+        android:paddingTop="20sp"
+        android:shadowColor="#0E0E0E"
+        android:text="Orbital"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="#FFFFFF"
+        android:textSize="45sp" />
+
+
+    <TextView
+        android:layout_width="291dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="316dp"
+        android:layout_marginEnd="52dp"
+        android:includeFontPadding="false"
+        android:shadowColor="#0E0E0E"
+        android:text="@string/sign_in_with_google_using_firebase"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/google_signIn"
+        android:layout_width="330dp"
+        android:layout_height="34dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="409dp"
+        android:layout_marginEnd="42dp"
+        android:background="@drawable/round_btn"
+        android:drawableLeft="@drawable/google4"
+        android:elevation="10dp"
+        android:shadowColor="@color/black"
+        android:text="@string/sign_in_with_google"
+        android:textColor="#fff" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="171dp"
+        android:layout_height="110dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="648dp"
+        android:layout_marginEnd="-9dp"
+        android:layout_marginBottom="-27dp"
+        android:contentDescription="@string/firebase"
+        app:srcCompat="@drawable/download1" />
+
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="72dp"
+        android:layout_height="73dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="509dp"
+        android:layout_marginEnd="169dp"
+        android:contentDescription="@string/github"
+        android:contextClickable="true"
+        app:srcCompat="@drawable/github" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="186dp"
+        android:layout_marginTop="673dp"
+        android:layout_marginEnd="-2dp"
+        android:layout_marginBottom="-15dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ezgif">
+
+    </pl.droidsonroids.gif.GifImageView>
+
+</RelativeLayout>
