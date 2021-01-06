@@ -1,10 +1,10 @@
  Project 1 - *Simple Todo*
 
-**Simple Todo** is an android app that allows building a todo list and basic todo items management functionality including adding new items, editing and deleting an existing item.
+**Orbital Note** is an android app that allows building a todo list and basic todo items management functionality including adding new items, editing and deleting an existing item.
 
 Submitted by: **Randy Alvarez**
 
-Time spent: **8** hours spent in total
+Time spent: **300~** hours spent in total
 
 ## User Stories
 
@@ -16,11 +16,18 @@ The following **required** functionality is completed:
 
 The following **optional** features are implemented:
 
-* [x] User can **tap a todo item in the list and bring up an edit screen for the todo item** and then have any changes to the text reflected in the todo list
+* [x] User can **tap a todo item in the list and bring up an edit dialog fragment for the todo item** and then have any changes to the text reflected in the todo list
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [x] User can **see the number of items** on the list through a counter on the top navigation bar
+* [x] User can **share and save the list of items** through any email client and file storage app on the user's phone
+* [x] User can **login with a google account** using the sign in button 
+* [x] User can **logout** using the logout button
+* [x] User can go to this repository and download their own clone by clicking the github logo 
+* [x] Added a custom made animated logo gif
+* [x] Added animated gradient backgrounds for "add" and "save" buttons
+* [x] User can search the list of items using the edit text and image button added to the top navigation bar
 
 ## Video Walkthrough
 
