@@ -38,7 +38,7 @@ Here's a walkthrough of implemented user stories:
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
-## Login
+## Login Screen
 
 <img src = 'login.gif' title = 'Login page' width ='' alt = 'Login'/>
 
