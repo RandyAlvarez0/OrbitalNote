@@ -38,13 +38,13 @@ Here's a walkthrough of implemented user stories:
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
-##Login Gif
+## Login
 
 <img src = 'login.gif' title = 'Login page' width ='' alt = 'Login'/>
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+Describe any challenges encountered while building the app. There were too many to count. :)
 
 ## License
 
