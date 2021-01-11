@@ -29,13 +29,18 @@ The following **additional** features are implemented:
 * [x] Added animated gradient backgrounds for "add" and "save" buttons
 * [x] User can search the list of items using the edit text and image button added to the top navigation bar
 
-## Video Walkthrough
+## Video Walkthrough                                                                       
 
 Here's a walkthrough of implemented user stories:
 
-<img src='walkthrough_.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='walkthrough_.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />  
+
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
+
+##Login Gif
+
+<img src = 'login.gif' title = 'Login page' width ='' alt = 'Login'/>
 
 ## Notes
 
