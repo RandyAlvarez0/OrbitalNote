@@ -1,5 +1,6 @@
 package com.example.simpletodo;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,13 +12,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -33,6 +42,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 */
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -46,7 +56,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Locale;
 import java.util.Objects;
 
 public class Application extends AppCompatActivity {
@@ -55,7 +69,7 @@ public class Application extends AppCompatActivity {
     public static final int EDIT_TEXT_CODE = 20;
     private GoogleSignInClient mGoogleSignInClient;
 
-    List<String> items;
+    List<TodoItem> items;
 
     ImageButton email;
     ImageButton logout;
@@ -66,6 +80,7 @@ public class Application extends AppCompatActivity {
     EditText edItem;
     RecyclerView rvItem;
     ItemsAdapter itemsAdapter;
+    Toolbar toolbar;
     AnimationDrawable animDrawable;
 
     /*
@@ -94,9 +109,12 @@ public class Application extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).hide();
 
+        final LottieAnimationView animationView = findViewById(R.id.animation);
+
         btnAdd = findViewById(R.id.btnAdd);
         email = findViewById(R.id.email);
         logout = findViewById(R.id.logout);
+        toolbar = findViewById(R.id.toolbar);
 
 
         /*
@@ -115,17 +133,23 @@ public class Application extends AppCompatActivity {
         animDrawable.setExitFadeDuration(3000);
         animDrawable.start();
 
-        imageButton = findViewById(R.id.imageButton);
-        editText = findViewById(R.id.editText);
+        animDrawable = (AnimationDrawable) toolbar.getBackground();
+        animDrawable.setEnterFadeDuration(3);
+        animDrawable.setExitFadeDuration(3000);
+        animDrawable.start();
+
+        items = new ArrayList<TodoItem>();
+        //imageButton = findViewById(R.id.imageButton);
+        //editText = findViewById(R.id.editText);
         edItem = findViewById(R.id.edItem);
         rvItem = findViewById(R.id.rvItem);
         textView2 = findViewById(R.id.textView2);
 
-        loadItems();
+        //loadItems();
 
-        int recyclerNum = items.size() ;
-        String str = String.valueOf(recyclerNum);
-        textView2.setText(str);
+//        int recyclerNum = items.size() ;
+//        String str = String.valueOf(recyclerNum);
+        textView2.setText("0");
 
         /*
         logout.setOnClickListener(new View.OnClickListener() {
@@ -136,13 +160,14 @@ public class Application extends AppCompatActivity {
         });
         */
 
+
         email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
                 String subject = "Orbital Note";
                 String message = "Notes";
                 for(int i = 0; i <= items.size() - 1; i++){
-                    message += "\n\n" + items.get(i) ;
+                    message += "\n\n" + items.get(i).getItem() ;
                 }
 
                 sendMail(subject, message);
@@ -156,6 +181,24 @@ public class Application extends AppCompatActivity {
             }
         });
 
+        ItemsAdapter.OnCheckBoxClickListener checkBoxClickListener = new ItemsAdapter.OnCheckBoxClickListener() {
+            @Override
+            public void onCheckBoxCLicked(int position) {
+                //items.remove(position);
+                //itemsAdapter.notifyItemRemoved(position);
+
+                animationView.setVisibility(View.VISIBLE);
+                animationView.playAnimation();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        animationView.setVisibility(View.GONE);
+                    }
+                }, 4000);
+
+            }
+        };
+
         ItemsAdapter.OnLongClickListener onLongClickListener = new ItemsAdapter.OnLongClickListener(){
             @Override
             public void onItemLongClicked(int position) {
@@ -167,7 +210,7 @@ public class Application extends AppCompatActivity {
                 textView2.setText(str);
 
                 Toast.makeText(getApplicationContext(),"Item was removed", Toast.LENGTH_SHORT).show();
-                saveItems();
+                //saveItems();
             }
         };
 
@@ -195,7 +238,7 @@ public class Application extends AppCompatActivity {
 
                 Button btnSave = dialog.findViewById(R.id.btnSave);
                 EditText etItem = dialog.findViewById(R.id.etItem);
-                etItem.setText(items.get(position));
+                etItem.setText(items.get(position).getItem());
 
                 animDrawable = (AnimationDrawable) btnSave.getBackground();
                 animDrawable.setEnterFadeDuration(3);
@@ -205,7 +248,8 @@ public class Application extends AppCompatActivity {
                 btnSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        items.set(position, etItem.getText().toString());
+                        items.get(position).setItem(etItem.getText().toString());
+                        //items.set(position, );
                         itemsAdapter.notifyItemChanged(position);
                         dialog.dismiss();
                     }
@@ -215,60 +259,109 @@ public class Application extends AppCompatActivity {
             }
         };
 
-        itemsAdapter = new ItemsAdapter(items, onLongClickListener, onClickListener);
+        itemsAdapter = new ItemsAdapter(items, onLongClickListener, onClickListener, checkBoxClickListener);
         rvItem.setAdapter(itemsAdapter);
         rvItem.setLayoutManager(new LinearLayoutManager(this));
+
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String todoItem = edItem.getText().toString();
-                items.add(todoItem);
+                TodoItem item = new TodoItem(todoItem, false);
+                items.add(item);
                 itemsAdapter.notifyItemInserted(items.size() - 1 );
                 edItem.setText("");
+                hideKeyboard(Application.this);
 
                 int recyclerNum = items.size() ;
                 String str = String.valueOf(recyclerNum);
                 textView2.setText(str);
 
-                Toast.makeText(getApplicationContext(),"Item was added", Toast.LENGTH_SHORT).show();
-                saveItems();
+                //Toast.makeText(getApplicationContext(),"Item was added", Toast.LENGTH_SHORT).show();
+                //saveItems();
             }
         });
 
-        imageButton.setOnClickListener(new View.OnClickListener() {
+        SearchView searchView = findViewById(R.id.searchView);
+        searchView.setQueryHint("Search");
+        searchView.clearFocus();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View v) {
-                String search = editText.getText().toString();
-                if(items.contains(search)){
-/*
-                    int index = items.indexOf(search);
-                    String firstIndex = items.get(0);
-                    items.set(0, search);
-                    itemsAdapter.notifyItemChanged(0, search);
-                    items.set(index, firstIndex);
-                    itemsAdapter.notifyItemChanged(index, firstIndex);
-                    editText.setText("");
-                    */
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
-                    int eleIndex = items.indexOf(search);
-
-                    for(int in = eleIndex; in > 0; in--){
-                        int index = items.indexOf(search);
-                        String elementPri = items.get(index - 1);
-
-                        items.set(index - 1, search);
-                        //itemsAdapter.notifyItemChanged(index - 1, search);
-                        items.set(index, elementPri);
-                        //itemsAdapter.notifyItemChanged(index, elementPri);
-
-                        itemsAdapter.notifyItemMoved(index , index - 1);
-                        editText.setText("");
-                    }
-
-                }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return true;
             }
         });
+
+//        imageButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //String search = editText.getText().toString();
+//
+//                if(items.contains(search)){
+//
+//                   int index = items.indexOf(search);
+//                    String firstIndex = items.get(0);
+//                   items.set(0, search);
+//                    itemsAdapter.notifyItemChanged(0, search);
+//                    items.set(index, firstIndex);
+//                    itemsAdapter.notifyItemChanged(index, firstIndex);
+//                    editText.setText("");
+//
+//
+//                   int eleIndex = items.indexOf(search);
+//
+//                    for(int in = eleIndex; in > 0; in--){
+//                     String elementPri = items.get(index - 1).getItem();
+//
+//                       items.get(index - 1).setItem(search);
+//                       //items.set(index - 1, search);
+//                        //itemsAdapter.notifyItemChanged(index - 1, search);
+//                        items.get(index).setItem(elementPri);
+//                        //items.set(index, elementPri);
+//                        //itemsAdapter.notifyItemChanged(index, elementPri);
+//
+//                       itemsAdapter.notifyItemMoved(index , index - 1);
+//                       editText.setText("");
+//                   }
+//
+//                }
+//            }
+//
+//
+//        });
+    }
+
+
+    private void filterList(String newText) {
+        List<TodoItem> filtered = new ArrayList<>();
+        for(TodoItem item : items){
+            if(item.getItem().toLowerCase().contains(newText.toLowerCase())){
+                filtered.add(item);
+            }
+
+            itemsAdapter.setFilteredList(filtered);
+
+        }
+    }
+
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public void sendMail(String subject, String message){
@@ -307,10 +400,11 @@ public class Application extends AppCompatActivity {
 
             String itemText = data.getStringExtra(KEY_ITEM_TEXT);
             int position = data.getExtras().getInt(KEY_ITEM_POSITION);
-            items.set(position, itemText);
+            items.get(position).setItem(itemText);
+            //items.set(position, itemText);
             itemsAdapter.notifyItemChanged(position);
 
-            saveItems();
+            //saveItems();
             Toast.makeText(getApplicationContext(), "Items updated successfully", Toast.LENGTH_SHORT).show();
         }else{
             Log.w("Application", "UnKnown call to onActivityResult");
@@ -321,16 +415,16 @@ public class Application extends AppCompatActivity {
         return new File(getFilesDir(), "data.txt");
     }
 
-    private void loadItems(){
-        try{
-            items = new ArrayList<>(FileUtils.readLines(getDataFile(), Charset.defaultCharset()));
-        }catch (IOException e){
-            Log.e("Application", "Error reading items", e);
-            items = new ArrayList<>();
-
-        }
-
-    }
+//    private void loadItems(){
+//        try{
+//            items = new ArrayList<TodoItem>(FileUtils.readLines(getDataFile(), Charset.defaultCharset()));
+//        }catch (IOException e){
+//            Log.e("Application", "Error reading items", e);
+//            items = new ArrayList<>();
+//
+//        }
+//
+//    }
 
     private void saveItems(){
         try {
