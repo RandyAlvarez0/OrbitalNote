@@ -4,7 +4,7 @@
 
 Submitted by: **Randy Alvarez**
 
-Time spent: **300~** hours spent in total
+Time spent: **304~** hours spent in total
 
 ## User Stories
 
